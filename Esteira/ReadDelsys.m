@@ -1,4 +1,4 @@
-function Acc = ReadDelsys(FilePath, ChannelType, Signal)
+function Acc = ReadDelsys2(FilePath, ChannelType, Signal)
 
 % fileID = fopen(FilePath,'r');
 % formatSpec = '%q%q%q%q%q%q%q%q%q%q%q%q%q%q%q%q%q%q%q%q%[^\n\r]';

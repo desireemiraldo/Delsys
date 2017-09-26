@@ -1,0 +1,9 @@
+FilePath =  'C:\Users\BMClab\Downloads\Desiree\Acelerometro\Delsys\acc\acc51-Delsys 1.csv';
+
+Contato1 = ReadDelsys(FilePath, 'EMG', 'EMG');
+Contato2 = ReadDelsys(FilePath, 'ACC', 'ACC Pitch');
+
+F = importdata('C:\Users\BMClab\Downloads\Desiree\Acelerometro\Delsys\acc\acc51.forces');
+Acc = dlmread('C:\Users\BMClab\Downloads\Desiree\Acelerometro\Delsys\acc\acc51.anc',' ',8,0);
+
+Fy = [(F.data(:,1)-1)/1200,F.data(:,24)];
