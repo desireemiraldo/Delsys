@@ -1,0 +1,45 @@
+function Data = ReadEMGworksWindows(FilePath,Sensor,Channel, deltaT)
+
+FileData = importdata(FilePath);
+
+if Sensor==11 || Sensor==12
+    label = ['Trigno FSR Adapter ',num2str(Sensor),': ',Channel,' ', num2str(Sensor)];
+else
+    label = ['Trigno IM sensor ',num2str(Sensor),': ',Channel,' ', num2str(Sensor),' (IM)'];
+end
+
+if strcmp(Channel,'EMG')
+    Fs = 1/(FileData.data(2,1)); 
+    linesNumber = ceil(deltaT*Fs);
+elseif strcmp(Channel,'Mag X') || strcmp(Channel,'Mag Y') || strcmp(Channel,'Mag Z') 
+    Fs = 1/(FileData.data(2,15)); 
+    linesNumber = ceil(deltaT*Fs);
+else
+    Fs = 1/(FileData.data(2,3)); 
+    linesNumber = ceil(deltaT*Fs);
+end
+
+% delete null data
+while FileData.data(end,2)==0
+    FileData.data(end,:) = [];
+end
+t = FileData.data(end,1);
+Win = floor(t/deltaT);
+
+Data = zeros(linesNumber,2,Win);
+
+
+
+for i = 1: length(FileData.colheaders)
+    if strcmp(string(FileData.colheaders(i)),label)
+        for w = 1: Win
+            Data(:,:,w) = FileData.data((w-1)*linesNumber+1:linesNumber*w,i-1:i);
+        end
+    end
+end
+
+end
+
+
+
+

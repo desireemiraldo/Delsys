@@ -1,6 +1,6 @@
 Name = 'DELAY_Plot_and_Store_Rep_1.0';
 FilePath =  'C:\Users\BMClab\Downloads\Desiree\Acelerometro\Delsys\acc\';
-Sensor = 1;
+Sensor = 2;
 
 AccX = ReadEMGWorks([FilePath,Name,'.xls'],Sensor,'ACC X');
 AccY = ReadEMGWorks([FilePath,Name,'.xls'],Sensor,'ACC Y');
