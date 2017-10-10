@@ -39,6 +39,7 @@ for k = 1: length(Var)
 end
 
 % -- Filter
+Fs = 148.14;
 [t,Wn] = buttord(10/(Fs/2),20/(Fs/2),1,60);
 [b,a] = butter(t, Wn);
 
@@ -97,19 +98,8 @@ for Sub = 1: length(names)
         Fheel = ReadEMGworksWindows(FilePath,11,'ACC X', deltaT);
         Ftoe = ReadEMGworksWindows(FilePath,11,'ACC y', deltaT);
         
-        %% ARRUMAR RESHAPE
-        
-        instant = importdata('Instantes_gait1.txt',';');
-        
-        %[NewInstant] = ReshapeInstants(delta, instant,[Folder,Name]);
-        [TO, HS] = ReshapeInstants1(delta, instant,[Folder,Name]);
-        
-        TO = TO + 36e-3; %Delay Delsys ACC
-        HS = HS  + 36e-3;
-        
         tic
 
-        
         %% -- Resultants
         
         % Delsys
@@ -122,6 +112,18 @@ for Sub = 1: length(names)
 %         Mag = [MagX(:,1,:), sqrt(MagX(:,2:end,:).^2 + MagY(:,2:end,:).^2 + MagZ(:,2:end,:).^2)];
 %         MagF = [MagX(:,1,:), sqrt(MagXF(:,2:end,:).^2 + MagYF(:,2:end,:).^2 + MagZF(:,2:end,:).^2)];
         
+                %% ARRUMAR RESHAPE
+        
+        delta(:,1,1) = ACC(1,1,:);
+        delta(:,2,1) = ACC(end,1,:);
+        
+        instant = importdata('Instantes_gait1.txt',';');
+        
+        %[NewInstant] = ReshapeInstants(delta, instant,[Folder,Name]);
+        [TO, HS] = ReshapeInstants1(delta, instant,[Folder,Name]);
+        
+        TO = TO + 36e-3; %Delay Delsys ACC
+        HS = HS  + 36e-3;
         
         %% Linear combination of different variables apllied in one trial
         
