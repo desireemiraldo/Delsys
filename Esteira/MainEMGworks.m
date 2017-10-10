@@ -8,9 +8,9 @@ clear all; clc; close all
 % % csv = '-Delsys 1.csv';
 
 paths = {'.\Piloto\'};
-folders = {'RNW'};
+folders = {'RNW\'};
 names = {'Piloto_profRenato__Plot_and_Store_Rep_1.5'};
-ext = {'xls'};
+ext = {'.xls'};
 shanksL = [];
 shanksR = [1,2,11];
 sensor = {{'ShankR'},{'ShankR'}};
@@ -59,10 +59,10 @@ RC = struct('TrialsTr',{0},'Features',{0},'Threshold',{0},'TP',{0},...
     'FP',{0},'TN',{0},'FN',{0},'beta',{0});
 RC = repmat(RC,TotalComb*101,1);
 
-p = NaN(2*winPts,length(Var),2*22);
-y = NaN(2*winPts,2*22);
-ForceY = NaN(2*60*FsFP,8);
-timeACC = NaN(size(y));
+% % p = NaN(2*winPts,length(Var),2*22);
+% % y = NaN(2*winPts,2*22);
+% % ForceY = NaN(2*60*FsFP,8);
+% % timeACC = NaN(size(y));
 ToeOff = [];
 HeelStrike = [];
 
@@ -77,13 +77,13 @@ for Sub = 1: length(names)
         Sensors = sensor{Sub};
         
         
-        FilePath = [Path,Folder,Name];
+        FilePath = [Path,Folder,Name,'.xls'];
         
         %% Loading Data
               
         for i = 1:length(Signal)
             VarName = strrep(Signal{i},' ','');
-            eval([VarName '= ReadEMGworksWindows(FilePath,Sensor,Signal(i), deltaT);']);
+            eval([VarName '= ReadEMGworksWindows(FilePath,ShankR,Signal(i), deltaT);']);
             %% Sensor = numero do sensor na torre delsys
             
             temp = eval(VarName);
@@ -98,12 +98,13 @@ for Sub = 1: length(names)
         Fheel = ReadEMGworksWindows(FilePath,11,'ACC X', deltaT);
         Ftoe = ReadEMGworksWindows(FilePath,11,'ACC y', deltaT);
         
+        
         tic
 
         %% -- Resultants
         
         % Delsys
-        ACC = [ACCX(:,1,:), sqrt(ACCX(:,2:end,:).^2 + ACCY(:,2:end,:).^2 + ACCYaw(:,2:end,:).^2)];
+        ACC = [ACCX(:,1,:), sqrt(ACCX(:,2:end,:).^2 + ACCY(:,2:end,:).^2 + ACCZ(:,2:end,:).^2)];
         ACCF = [ACCX(:,1,:), sqrt(ACCXF(:,2:end,:).^2 + ACCYF(:,2:end,:).^2 + ACCZF(:,2:end,:).^2)];
         
         Gyro = [GyroX(:,1,:), sqrt(GyroX(:,2:end,:).^2 + GyroY(:,2:end,:).^2 + GyroZ(:,2:end,:).^2)];

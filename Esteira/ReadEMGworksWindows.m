@@ -1,4 +1,4 @@
-function Data = ReadEMGworksWindows(FilePath,Sensor,Channel, deltaT)
+function Data = ReadEMGworksWindows(FilePath,Sensor,Channel, deltaT, deleteTime)
 
 FileData = importdata(FilePath);
 
@@ -23,6 +23,11 @@ end
 while FileData.data(end,2)==0
     FileData.data(end,:) = [];
 end
+% Delete first and last 'deleteTime' seconds
+del = floor(Fs*deleteTime);
+FileData.data(1:del,:) = []; FileData.data(end-del:end,:) = [];
+
+
 t = FileData.data(end,1);
 Win = floor(t/deltaT);
 

@@ -71,7 +71,7 @@ for Sub = 1: length(names)
        
         % FSR data
         Fheel = ReadEMGworksWindows(FilePath,11,'ACC X', deltaT);
-        Ftoe =ReadEMGworksWindows(FilePath,11,'ACC Y', deltaT);
+        Ftoe = ReadEMGworksWindows(FilePath,11,'ACC Y', deltaT);
         
 
 

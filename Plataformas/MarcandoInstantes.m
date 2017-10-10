@@ -1,10 +1,10 @@
 %clear all; clc; close all
 FsFP = 300; %Hz
 
-Path = 'C:\Users\BMClab\Downloads\Desiree\Acelerometro\Acelerometro-GitHub\Esteira\Dropfoot\';
-File = '\MD\Descalco3_Dual_170831_1';
+Path = 'C:\Users\BMClab\Downloads\Desiree\Drop Foot Project\Identificacao de evento\Processamento\Delsys\Esteira\Piloto\';
+File = 'RNW\RNW_Calçado_Confortavel_Rep_1.1';
 FilePath = [Path,File];
-csv = '-Delsys 1.csv';
+csv = '.xls';
 numSensors = [11,12];
 
 % Cortex data
