@@ -1,8 +1,8 @@
-%clear all; clc; close all
+clear all; clc; close all
 FsFP = 300; %Hz
 
 Path = 'C:\Users\BMClab\Downloads\Desiree\Drop Foot Project\Identificacao de evento\Processamento\Delsys\Esteira\Piloto\';
-File = 'RNW\RNW_Calçado_Confortavel_Rep_2.2';
+File = 'RNW\RNW_Calçado_Rapido_Rep_5.10';
 ext = '.xls';
 
 
@@ -18,7 +18,8 @@ Ftoe = ReadEMGWorks(FilePath,11,'ACC Y',3);
 
 figure(2);
 plot(Ftoe(:,1),Ftoe(:,2),'k', Fheel(:,1),Fheel(:,2),'b')
-xlim([3 25])
+xlim([3 22]);
+title(File);
 
 
 %     hold on
