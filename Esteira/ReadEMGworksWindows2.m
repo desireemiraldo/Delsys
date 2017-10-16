@@ -1,4 +1,4 @@
-function Data = ReadEMGworksWindows(FilePath,Sensor,Channel, deltaT, deleteTime)
+function Var = ReadEMGworksWindows2(Data,Sensor,Signal, deltaT, deleteTime)
 
 FileData = importdata(FilePath);
 
@@ -31,7 +31,7 @@ FileData.data(1:del,:) = []; FileData.data(end-del:end,:) = [];
 t = FileData.data(end,1);
 Win = floor(t/deltaT);
 
-Data = zeros(linesNumber,2,Win);
+Var = zeros(linesNumber,2,Win);
 
 
 
@@ -40,7 +40,7 @@ for i = 1: length(FileData.colheaders)
     disp(label);
     if strcmp(string(FileData.colheaders(i)),label)
         for w = 1: Win
-            Data(:,:,w) = FileData.data((w-1)*linesNumber+1:linesNumber*w,i-1:i);
+            Var(:,:,w) = FileData.data((w-1)*linesNumber+1:linesNumber*w,i-1:i);
         end
     end
 end

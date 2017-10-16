@@ -8,8 +8,9 @@ clear all; clc; close all
 % 
 % FilePath = [Path,File,ext];
 
-FilePath = 'C:\Users\desir\Desktop\Acelerometro - Aug17\Delsys\Esteira\Piloto\RNW\RNW_Descalco_Confortavel_Rep_6.22.xls';
+FilePath = '.\Piloto\RNW\RNW_Descalco_Confortavel_Rep_6.22.xls';
 
+x= ReadEMGWorks(FilePath,1,'ACC X',3);
 
 Fheel = ReadEMGWorks(FilePath,11,'ACC X',3);
 Ftoe = ReadEMGWorks(FilePath,11,'ACC Y',3);

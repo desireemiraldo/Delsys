@@ -5,7 +5,7 @@ FileData = importdata(FilePath);
 if Sensor==11 || Sensor==12
     label = strcat("Trigno FSR Adapter ",num2str(Sensor),":"," ",Channel," ", num2str(Sensor));
 else
-    label = strcat("Trigno IM sensor",num2str(Sensor),":"," ",Channel," ", num2str(Sensor)," (IM)");
+    label = strcat("Trigno IM sensor ",num2str(Sensor),":"," ",Channel," ", num2str(Sensor)," (IM)");
 end
 
 if strcmp(Channel,'EMG')

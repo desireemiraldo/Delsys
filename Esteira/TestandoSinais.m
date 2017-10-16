@@ -17,7 +17,7 @@ for k = 1: length(Var)
 end
 
 % -- Filter
-Fs = 148.14;
+Fs = 148.1481;
 [t,Wn] = buttord(10/(Fs/2),20/(Fs/2),1,60);
 [b,a] = butter(t, Wn);
 
@@ -59,7 +59,7 @@ for Trials = 1: length(Files)
     for i = 1:length(Signal)
         
         VarName = strrep(Signal{i},' ','');
-        eval([VarName, ' = zeros(ceil(Fs*deltaT),2, length(Files));']);
+        eval([VarName, ' = zeros(ceil(Fs*deltaT),2, 10*length(Files));']);
         
         
         %% Loading Data
