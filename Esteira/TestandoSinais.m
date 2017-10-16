@@ -1,14 +1,5 @@
-paths = {'.\Piloto\','.\Piloto\','.\Piloto\','.\Piloto\','.\Piloto\','.\Piloto\'};
-folders = {'RNW\','RNW\','RNW\','RNW\','RNW\','RNW\'};
-names = {'Piloto_profRenato__Plot_and_Store_Rep_1.5',...
-    'Piloto_profRenato__Plot_and_Store_Rep_2.6',...
-    'Piloto_profRenato__Plot_and_Store_Rep_2.1',...
-    'Piloto_profRenato_Tenis_Plot_and_Store_Rep_1.2',...
-    'Piloto_profRenato_Tenis_Plot_and_Store_Rep_1.3',...
-    'Piloto_profRenato_Tenis_Plot_and_Store_Rep_2.4'};
-ext = {'.xls','.xls','.xls','.xls','.xls','.xls'};
-
-
+%% Gait Analysis (w/ accelerometer)
+clear all; clc; close all
 
 % --
 Signal = {'ACC X', 'ACC Y', 'ACC Z',...
@@ -46,44 +37,58 @@ deltaT = 2.75; %seconds/window
 ToeOff = [];
 HeelStrike = [];
 
-for Sub = 1: length(names)
+Path = '.\Piloto\RNW\';
+
+Files = {'RNW_Calçado_Confortavel_Rep_1.1',...
+    'RNW_Calçado_Confortavel_Rep_2.2',...
+    'RNW_Calçado_Confortavel_Rep_3.3',...
+    'RNW_Calçado_Confortavel_Rep_4.4',...
+    'RNW_Calçado_Confortavel_Rep_5.5',...
+    'RNW_Delcalco_Confortavel_Rep_1.17',...
+    'RNW_Delcalco_Confortavel_Rep_2.18',...
+    'RNW_Delcalco_Confortavel_Rep_4.20',...
+    'RNW_Delcalco_Confortavel_Rep_5.21',...
+    'RNW_Delcalco_Confortavel_Rep_6.22'};
+
+for Trials = 1: length(Files)
+    
+    Name = Files {Trials};
+    
+    FilePath = [Path,Name,'.xls'];
+    
+    for i = 1:length(Signal)
         
-        Path = paths{Sub};
-        Folder = folders{Sub};
-        Name = names {Sub};
-        xls = ext{Sub};       
+        VarName = strrep(Signal{i},' ','');
+        eval([VarName, ' = zeros(ceil(Fs*deltaT),2, length(Files));']);
         
-        FilePath = [Path,Folder,Name,xls];
         
         %% Loading Data
-              
-        for i = 1:length(Signal)
-            VarName = strrep(Signal{i},' ','');
-            eval([VarName '=  ReadEMGworksWindows(FilePath,1,Signal(i), deltaT);']);
-            %% Sensor = numero do sensor na torre delsys
-            
-            temp = eval(VarName);
-            %Filtering
-            eval([VarName 'F = [temp(:,1,:),filtfilt(b,a,temp(:,2:end,:))];']);
-        end
         
-        EMG =  ReadEMGworksWindows(FilePath,1,'EMG', deltaT);
-       
+        eval([VarName, '(:,:, Trials) =  ReadEMGworksWindows(FilePath,Sensor,Signal(i), deltaT, 3);']);
+        
+        %% Sensor = numero do sensor na torre delsys
+        
+        
+        % EMG =  ReadEMGworksWindows(FilePath,1,'EMG', deltaT);
+        
         % FSR data
         Fheel = ReadEMGworksWindows(FilePath,11,'ACC X', deltaT);
         Ftoe = ReadEMGworksWindows(FilePath,11,'ACC Y', deltaT);
         
+    end
+end
+%Filtering
+eval([VarName 'F = [temp(:,1,:),filtfilt(b,a,temp(:,2:end,:))];']);
 
+%% -- Resultants
 
-        %% -- Resultants
-        
-        % Delsys
-        ACC = [ACCX(:,1,:), sqrt(ACCX(:,2:end,:).^2 + ACCY(:,2:end,:).^2 + ACCYaw(:,2:end,:).^2)];
-        ACCF = [ACCX(:,1,:), sqrt(ACCXF(:,2:end,:).^2 + ACCYF(:,2:end,:).^2 + ACCZF(:,2:end,:).^2)];
-        
-        Gyro = [GyroX(:,1,:), sqrt(GyroX(:,2:end,:).^2 + GyroY(:,2:end,:).^2 + GyroZ(:,2:end,:).^2)];
-        GyroF = [GyroX(:,1,:), sqrt(GyroXF(:,2:end,:).^2 + GyroYF(:,2:end,:).^2 + GyroZF(:,2:end,:).^2)];
-        
+% Delsys
+ACC = [ACCX(:,1,:), sqrt(ACCX(:,2:end,:).^2 + ACCY(:,2:end,:).^2 + ACCYaw(:,2:end,:).^2)];
+ACCF = [ACCX(:,1,:), sqrt(ACCXF(:,2:end,:).^2 + ACCYF(:,2:end,:).^2 + ACCZF(:,2:end,:).^2)];
+
+Gyro = [GyroX(:,1,:), sqrt(GyroX(:,2:end,:).^2 + GyroY(:,2:end,:).^2 + GyroZ(:,2:end,:).^2)];
+GyroF = [GyroX(:,1,:), sqrt(GyroXF(:,2:end,:).^2 + GyroYF(:,2:end,:).^2 + GyroZF(:,2:end,:).^2)];
+
 %         Mag = [MagX(:,1,:), sqrt(MagX(:,2:end,:).^2 + MagY(:,2:end,:).^2 + MagZ(:,2:end,:).^2)];
 %         MagF = [MagX(:,1,:), sqrt(MagXF(:,2:end,:).^2 + MagYF(:,2:end,:).^2 + MagZF(:,2:end,:).^2)];
 
@@ -118,5 +123,3 @@ plot(GyroYF(:,1), GyroYF(:,2))
 
 subplot(4,1,4)
 plot(GyroZF(:,1), GyroZF(:,2))
-
-end
