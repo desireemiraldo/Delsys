@@ -66,15 +66,14 @@ HeelStrike = [];
 for Sub = 1: length(Folder)
     for w = 1: length(Win)
         
-        instant = importdata([Path,Folder{Sub},'Instantes.txt'],';');
-        
-        % Data = BuildingTrials([Path,Folder{Sub}],Files, 3, deltaT);
-        % save('RNW_data.mat','Data');
+%         Data = BuildingTrials([Path,Folder{Sub}],Files, 3, deltaT);
+%         save('RNW_data.mat','Data');
         load RNW_data.mat
         
         delta(:,1,1) = Data(1,1,:);
         delta(:,2,1) = Data(end,1,:);
         
+        instant = importdata([Path,Folder{Sub},'Instantes.txt'],';');
         
         for i = 1:length(Signal)
             

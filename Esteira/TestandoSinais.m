@@ -59,7 +59,7 @@ for Trials = 1: length(Files)
     for i = 1:length(Signal)
         
         VarName = strrep(Signal{i},' ','');
-        eval([VarName, ' = zeros(ceil(Fs*deltaT),2, 10*length(Files));']);
+        eval([VarName, ' = SelectVar2(Data1,1,Signal(i));']);
         
         
         %% Loading Data
