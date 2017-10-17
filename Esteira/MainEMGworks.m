@@ -68,12 +68,18 @@ for Sub = 1: length(Folder)
         
         instant = importdata([Path,Folder{Sub},'Instantes.txt'],';');
         
-        % Data = BuildingTrials([Path,Folder{Sub}],Files, 3, deltaT);
+        %% APAGAR DEPOIS
+        for x = 2:11
+            instant.textdata(x,1) = strrep(instant.textdata(x,1),'Calcado','Calçado');
+        end
+        %% 
+        
+        % Data = BuildingTrials([Path,Folder{Sub}],Files, 3, deltaT, instant);
         % save('RNW_data.mat','Data');
         load RNW_data.mat
         
-        delta(:,1,1) = Data(1,1,:);
-        delta(:,2,1) = Data(end,1,:);
+        delta(:,1,1) = Data.data(1,1,:);
+        delta(:,2,1) = Data.data(end,1,:);
         
         
         for i = 1:length(Signal)
@@ -111,7 +117,7 @@ for Sub = 1: length(Folder)
        
         
         %[NewInstant] = ReshapeInstants(delta, instant,[Folder,Name]);
-        [TO, HS] = ReshapeInstants1(delta, instant,Files);
+        [TO, HS] = ReshapeInstants2(delta, instant,Files);
         
         TO = TO + 36e-3; %Delay Delsys ACC
         HS = HS  + 36e-3;
@@ -123,13 +129,13 @@ for Sub = 1: length(Folder)
         
         % -- Initializing variables for linear combination
         
-        pp = NaN(size(Data,1),length(Var),size(Data,3));
-        yy = NaN(size(Data,1),size(Data,3));
+        pp = NaN(size(Data.data,1),length(Var),size(Data.data,3));
+        yy = NaN(size(Data.data,1),size(Data.data,3));
         
-        first = NaN(1,size(Data,3));
-        last = NaN(1,size(Data,3));
+        first = NaN(1,size(Data.data,3));
+        last = NaN(1,size(Data.data,3));
         
-        for j = 1 : size(Data,3)
+        for j = 1 : size(Data.data,3)
             % for i = 1 : length(Sensors)
                 first(j) = min([HS(j,:),TO(j,:)],[],2);
                 last(j) = max([HS(j,:),TO(j,:)],[],2);
@@ -137,11 +143,11 @@ for Sub = 1: length(Folder)
                 tempTO = (TO(j,:));
                 tempTO(isnan(tempTO))=[];
                 if strcmp(Win(w),'Gauss')
-                    stimulWin = sum(exp(-0.5*((Data(:,1,j) - (tempTO - sd))/(sd/3)).^2),2);
+                    stimulWin = sum(exp(-0.5*((Data.data(:,1,j) - (tempTO - sd))/(sd/3)).^2),2);
                 end
                 
                 if strcmp(Win(w),'Rect')
-                    stimulWin = zeros(length(Data),1);
+                    stimulWin = zeros(length(Data.data),1);
                     for kk = 1: size(TO,2)
                         stimulWin(floor((TO(j,kk)-2*sd)*Fs):floor(TO(j,kk)*Fs)) = 1;
                     end
@@ -155,13 +161,13 @@ for Sub = 1: length(Folder)
             % end
         end
     end
-    p(:,:,(Sub-1)*(length(Sensors)*size(Data,3))+1: Sub*(length(Sensors)*size(Data,3))) = pp;
-    y(:,(Sub-1)*(length(Sensors)*size(Data,3))+1: Sub*(length(Sensors)*size(Data,3))) = yy;
+    p(:,:,(Sub-1)*(length(Sensors)*size(Data.data,3))+1: Sub*(length(Sensors)*size(Data.data,3))) = pp;
+    y(:,(Sub-1)*(length(Sensors)*size(Data.data,3))+1: Sub*(length(Sensors)*size(Data.data,3))) = yy;
     ForceY((Sub-1)*60*FsFP +1:Sub*60*FsFP,:) = Fy;
     
     ToeOff = [ToeOff;TO];
     HeelStrike = [HeelStrike;HS];
-    timeACC(:,(Sub-1)*(length(Sensors)*size(Data,3))+1: Sub*(length(Sensors)*size(Data,3)),1) = ACC(:,1,:);
+    timeACC(:,(Sub-1)*(length(Sensors)*size(Data.data,3))+1: Sub*(length(Sensors)*size(Data.data,3)),1) = ACC(:,1,:);
     
 end
 %% --- TESTANDO AS JANELAS DE ESTÍMULO
