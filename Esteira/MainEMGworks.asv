@@ -161,6 +161,14 @@ for Sub = 1: length(Folder)
         end
         % end
     end
+    % %     p(:,:,(Sub-1)*(length(Sensors)*size(Data.data,3))+1: Sub*(length(Sensors)*size(Data.data,3))) = pp;
+    % %     y(:,(Sub-1)*(length(Sensors)*size(Data.data,3))+1: Sub*(length(Sensors)*size(Data.data,3))) = yy;
+    % %     ForceY((Sub-1)*60*FsFP +1:Sub*60*FsFP,:) = Fy;
+    % %
+    % %     ToeOff = [ToeOff;TO];
+    % %     HeelStrike = [HeelStrike;HS];
+    % %     timeACC(:,(Sub-1)*(length(Sensors)*size(Data.data,3))+1: Sub*(length(Sensors)*size(Data.data,3)),1) = ACC(:,1,:);
+    
 end
 
 %% --- TESTANDO AS JANELAS DE ESTÍMULO
@@ -176,6 +184,7 @@ end
 
 n=0; %t=0;
 for pct = 0: 0.01 : 1
+    
     n = n+1;
     disp(pct)
     [ResultsCombinatorics] = combinatorics2(Var,1,pp,yy,pct,TO,Ftoe,delay,time,indTr,indTs);
@@ -184,7 +193,7 @@ for pct = 0: 0.01 : 1
     RC((n-1)*TotalComb + 1 : n*TotalComb) = ResultsCombinatorics;
    
 end
-Name = strrep(Folder{Sub},'\','sensor1');
+Name = strrep(Folder{Sub},'\','sensor');
 % save([Name,'.mat'],'RT')
 save([Name,'.mat'],'RC')
 
