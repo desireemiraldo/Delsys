@@ -8,7 +8,7 @@ clear all; clc; close all
 % 
 % FilePath = [Path,File,ext];
 
-FilePath = '.\Piloto\RNW\RNW_Descalco_Rapido_Rep_4.26.xls';
+FilePath = '.\Piloto\RNW\RNW_Descalco_Rapido_Rep_2.24.xls';
 
 x= ReadEMGWorks(FilePath,1,'ACC X',3);
 
