@@ -47,11 +47,7 @@ for k = 1: length(Var)
                     LinearCombination(:,index) = pTs(:,:,(j)+(i-1)*length(indTs))*betaM;
                     
                     %% Plot Fy
-<<<<<<< HEAD
                     
-=======
-%                     
->>>>>>> 956371ee54aa76ae2789cdcabdf821697a96b338
 %                     figure(index)
 %                     subplot(2,1,1); plot(Fy(:,1,index)+delay, Fy(:,2,index),'linewidth',1.5,'Color',[0.3 0.3 0.3]);
 %                     hold on;
@@ -68,15 +64,9 @@ for k = 1: length(Var)
 %                     xlabel('Tempo [s]','fontsize',12)
 %                     
                     %  --- Checking the combination's quality
-<<<<<<< HEAD
                     threshold = (max(max(LinearCombination(:,:))))*pct;
                     [pks,locs] = findpeaks(LinearCombination(:,index),time(:,index),'MinPeakHeight',threshold);
                     
-=======
-                    threshold = (max(LinearCombination(:,index)))*pct;
-                    [pks,locs] = findpeaks(LinearCombination(:,index),time(:,index),'MinPeakHeight',threshold);
-%                     
->>>>>>> 956371ee54aa76ae2789cdcabdf821697a96b338
 %                     for z = 1:length(locs)
 %                         Line = line([locs(z) locs(z)], [-0.15 3],'Linewidth',1.5,'Linestyle','--','Color',[0 0 0]);
 %                         set(Line,'Clipping','off')
