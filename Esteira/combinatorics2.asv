@@ -47,41 +47,31 @@ for k = 1: length(Var)
                     LinearCombination(:,index) = pTs(:,:,(j)+(i-1)*length(indTs))*betaM;
                     
                     %% Plot Fy
-<<<<<<< HEAD
                     
-=======
-%                     
->>>>>>> 956371ee54aa76ae2789cdcabdf821697a96b338
-%                     figure(index)
-%                     subplot(2,1,1); plot(Fy(:,1,index)+delay, Fy(:,2,index),'linewidth',1.5,'Color',[0.3 0.3 0.3]);
-%                     hold on;
-%                     plot(time(:,index),20*y(:,index),'r','linewidth',1.5)
-%                     xlim([time(1,index),time(end,index)]);
-%                     xticklabels({})
-%                     ylabel('Força [kg/N]','fontsize',12)
-%                     %title([' Trial ', num2str(index)]);
-%                     
-%                     subplot(2,1,2); plot(time(:,index),LinearCombination(:,index),'linewidth',1.5);
-%                     ylim([min(LinearCombination(:,index))*1.1 max(LinearCombination(:,index))*1.1]);
-%                     xlim([time(1,index),time(end,index)]);
-%                     ylabel('Combinação Linear','fontsize',12)
-%                     xlabel('Tempo [s]','fontsize',12)
-%                     
+                    figure(index)
+                    subplot(2,1,1); plot(Fy(:,1,index)+delay, Fy(:,2,index),'linewidth',1.5,'Color',[0.3 0.3 0.3]);
+                    hold on;
+                    plot(time(:,index),20*y(:,index),'r','linewidth',1.5)
+                    xlim([time(1,index),time(end,index)]);
+                    xticklabels({})
+                    ylabel('Força [kg/N]','fontsize',12)
+                    %title([' Trial ', num2str(index)]);
+                    
+                    subplot(2,1,2); plot(time(:,index),LinearCombination(:,index),'linewidth',1.5);
+                    ylim([min(LinearCombination(:,index))*1.1 max(LinearCombination(:,index))*1.1]);
+                    xlim([time(1,index),time(end,index)]);
+                    ylabel('Combinação Linear','fontsize',12)
+                    xlabel('Tempo [s]','fontsize',12)
+                    
                     %  --- Checking the combination's quality
-<<<<<<< HEAD
-                    threshold = (max(max(LinearCombination(:,:))))*pct;
-                    [pks,locs] = findpeaks(LinearCombination(:,index),time(:,index),'MinPeakHeight',threshold);
-                    
-=======
                     threshold = (max(LinearCombination(:,index)))*pct;
                     [pks,locs] = findpeaks(LinearCombination(:,index),time(:,index),'MinPeakHeight',threshold);
-%                     
->>>>>>> 956371ee54aa76ae2789cdcabdf821697a96b338
-%                     for z = 1:length(locs)
-%                         Line = line([locs(z) locs(z)], [-0.15 3],'Linewidth',1.5,'Linestyle','--','Color',[0 0 0]);
-%                         set(Line,'Clipping','off')
-%                     end
-%                     
+                    
+                    for z = 1:length(locs)
+                        Line = line([locs(z) locs(z)], [-0.15 1.4],'Linewidth',1.5,'Linestyle','--','Color',[0 0 0]);
+                        set(Line,'Clipping','off')
+                    end
+                    
                     ind = [Fy(1,1,index), ToeOff(index,:),Fy(end,1,index)+0.1];
                     ind(isnan(ind))=[];
                     
