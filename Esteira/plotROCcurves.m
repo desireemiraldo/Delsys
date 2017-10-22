@@ -14,9 +14,9 @@ pct = -0.5: 0.01 : 1;
 
 for sensor = 1:2
     if sensor == 1
-        load('RNWsensor1.mat')
+        load('RNWsensor1_velocities.mat')
     else
-        load('RNWsensor2.mat')
+        load('RNWsensor2_velocities.mat')
     end
     [Sensib,Specif] = ROCcurve(RC);
     
@@ -57,9 +57,9 @@ for sensor = 1:2
     if sensor == 1
         Order1 = Order;
     else
-        load('RNWsensor2.mat')
+        Order2 = Order;
     end
-    Order2 = Order;
+%     load('RNWsensor2.mat')
 end
 
 %load([Path1,'MelhoresCombinacoes_9var.mat']);
