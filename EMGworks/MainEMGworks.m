@@ -3,8 +3,6 @@ clear all; clc; close all
 
 %% -- About the files
 
-%% ----------------> SORTEAR A PERNA!! <----------------------------
-
 Path = '.\Piloto\';
 
 Folder = {'RNW\'};
@@ -40,7 +38,9 @@ Files = {'RNW_Calçado_Confortavel_Rep_1.1',...
     'RNW_Descalco_Lento_Rep_5.33',...
     'RNW_Descalco_Lento_Rep_6.34'};
 
-Sensor = {[1,2]};
+right = {[1,2]};
+
+left = {[]};
 
 Win = {'Gauss'}; %,'Rect'};
 
@@ -77,6 +77,14 @@ delay = 0;
 % --
 
 for Sub = 1: length(Folder)
+% %     Files = dir([Path,Folder{Sub},'*Rep*.xls']);
+% %     Files = Files.name; % < ------------------- VERIFICAR!!!!
+    %     shank = {'right', 'left'};
+    %     side = randperm(2,1);
+    %
+    %     Sensor = eval(shank{side});
+    Sensor = right; % <------------------ APAGAR
+    
     for numSensor = 1:length(Sensor{Sub})
         for w = 1: length(Win)
             %% Loading data
@@ -88,15 +96,17 @@ for Sub = 1: length(Folder)
                 instant.textdata(x,1) = strrep(instant.textdata(x,1),'Calcado','Calçado');
             end
             
-% % % % %             load RNW_data.mat
-% % % % %             numWin = [0;7;14;21;28;34;41;48;54;61;68];
-            load('RNWvelocities_data.mat');
-            numWin = [0;7;14;21;28;34;39;44;49;53;59;66;73;80;88;94;101;...
-                108;114;121;128;134;141;146;151;156;162;169;176;183;190];
+            % % % % % % % % % %             load RNW_data.mat
+            % % % % % % % % % %             numWin = [0;7;14;21;28;34;41;48;54;61;68];
+            load([Path,Folder{Sub},'.matData\RNWvelocities_data.mat']);
+            load([Path,Folder{Sub},'.matData\RNWvelocities_numWin.mat']);
+            
             %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             
-%             [Data,numWin] = BuildingTrials2([Path,Folder{Sub}],Files, 3, deltaT);
-%             save('RNWvelocities_data.mat','Data');
+            %             [Data,numWin] = BuildingTrials2([Path,Folder{Sub}],Files, 3, deltaT);
+            %             save('RNWvelocities_data.mat','Data');
+            %             save('RNWvelocities_numWin.mat','numWin');
+            %%%%%         movefile (-------,'.matData')
             
             time = Data.data(:,1,:);
             delta = nan(size(time,3),2);
@@ -212,10 +222,11 @@ for Sub = 1: length(Folder)
                 RC((n-1)*TotalComb + 1 : n*TotalComb) = ResultsCombinatorics;
                 
             end
-            Name = strrep(Folder{Sub},'\',['sensor',num2str(Sensor{Sub}(numSensor)),'_velocities']);
+            Name = strrep(Folder{Sub},'\',['sensor',num2str(Sensor{Sub}(numSensor)),'_velocities2']);
             % save([Name,'.mat'],'RT')
             save([Name,'.mat'],'RC')
             
+            movefile ([Name,'.mat'],'Resultados')
             
             clear RC; %clear RT
             

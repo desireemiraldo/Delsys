@@ -46,7 +46,7 @@ for i = 1: length(Files)
     
     t = (FilesData.data(end,1)-FilesData.data(1,1));
     Win = floor(t/deltaT);
-    numWin(i+1) = sum(numWin) + Win;
+    numWin(i+1) = numWin(i) + Win;
     
     newData = zeros(linesNumber,size(FilesData.data,2),Win);
     for w = 1: Win
