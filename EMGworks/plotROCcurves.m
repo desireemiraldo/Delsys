@@ -14,9 +14,9 @@ pct = -0.5: 0.01 : 1;
 
 for sensor = 1:2
     if sensor == 1
-        load('RNWsensor1_velocities.mat')
+        load('Resultados\RNWsensor1_velocities2.mat')
     else
-        load('RNWsensor2_velocities.mat')
+        load('Resultados\RNWsensor2_velocities2.mat')
     end
     [Sensib,Specif] = ROCcurve(RC);
     
