@@ -6,6 +6,7 @@
 # Windows default autosave extension
 *.asv
 *.mat
+*.hpf
 
 # OSX / *nix default autosave extension
 *.m~

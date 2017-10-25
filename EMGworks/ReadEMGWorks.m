@@ -18,9 +18,9 @@ end
 
 
 % delete null data
-while FileData.data(end,2)==0
-    FileData.data(end,:) = [];
-end
+% % % while FileData.data(end,2)==0
+% % %     FileData.data(end,:) = [];
+% % % end
 t = FileData.data(end,1);
 
 % Delete first and last 'deleteTime' seconds
