@@ -1,4 +1,4 @@
-clc; close all; clear all
+clc; close all; clear all;
 
 Path = '.\Piloto\';
 
@@ -20,28 +20,27 @@ Sub = 4;
 Files = dir([Path,Folder{Sub},'*Rep*.xlsx']);
 Files = {(Files(:).name)}';
 
-for f = 1:length(Files)
+for f = 3:length(Files)
     FilePath = [Path,Folder{Sub},Files{f}];
     
-    Sensor = eval(Shank{1});
-    tic
-    FtoeR = ReadEMGWorks2(FilePath,Sensor{Sub}(3),'ACC Y');
-    FheelR = ReadEMGWorks2(FilePath,Sensor{Sub}(3),'ACC X');
-    toc
-    
-    tic
-    
-    Sensor = eval(Shank{2});
-    FtoeL = ReadEMGWorks2(FilePath,Sensor{Sub}(3),'ACC Y');
-    FheelL = ReadEMGWorks2(FilePath,Sensor{Sub}(3),'ACC X');
-    toc
-    
-    figure(f);
-    plot(FtoeR(:,1),FtoeR(:,2),'b', FtoeL(:,1),FtoeL(:,2),'r',...
-        FheelR(:,1),FheelR(:,2),'b--', FheelL(:,1),FheelL(:,2),'r--')
-    title(Files{f});%,' - ',Shank{s}]);
-    
-    keyboard;
+    for s =1:2
+        if s ==1
+        Sensor = eval(Shank{s});
+        
+        tic
+        Ftoe = ReadEMGWorks2(FilePath,Sensor{Sub}(3),'ACC Y');
+        %FheelL = ReadEMGWorks2(FilePath,Sensor{Sub}(3),'ACC X');
+        toc
+        
+        figure(s);
+        plot(Ftoe(:,1),Ftoe(:,2));
+        
+        %     plot(FtoeR(:,1),FtoeR(:,2),'b', FtoeL(:,1),FtoeL(:,2),'r',...
+        %         FheelR(:,1),FheelR(:,2),'b--', FheelL(:,1),FheelL(:,2),'r--')
+        title([Files{f},' - ',Shank{s}]);
+        keyboard;
+        end
+    end
+
     
 end
-% end
