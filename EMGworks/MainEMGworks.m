@@ -55,7 +55,6 @@ for Sub = 1: length(Folder)
 %     side = randperm(2,1);
 %     
 %     Sensor = eval(shank{side});
-    Sensor = right; % <------------------ APAGAR
     
     for numSensor = 1:length(Sensor{Sub})
         for w = 1: length(Win)
