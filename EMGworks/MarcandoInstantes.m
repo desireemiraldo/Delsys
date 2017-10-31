@@ -1,6 +1,6 @@
 clc; close all; clear all;
 
-Path = '.\Piloto\';
+Path = '.\Data\';
 
 Folder = {'S001\','S002\','S003\','S004\','S005\','S006\','S007\','S008\'};
 
@@ -23,7 +23,7 @@ Sub = 8;
 
 
 % for Sub = 1: length(Folder)
-Files = dir([Path,Folder{Sub},'*Rep*.xlsx']);
+Files = dir([Path,Folder{Sub},'*Rep*.csv']);
 Files = {(Files(:).name)}';
 
 for f = 9:length(Files)

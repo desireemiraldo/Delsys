@@ -10,7 +10,8 @@ end
 
 
 for i = 1: length(FileData.colheaders)
-    if strcmp(string(FileData.colheaders(i)),label)
+    AA = strrep(FileData.colheaders(i),'"','');
+    if strcmp(AA,label)
         Data = FileData.data(:,i-1:i);
     end
 end

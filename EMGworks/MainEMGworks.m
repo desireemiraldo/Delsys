@@ -5,7 +5,7 @@ clear all; clc; close all
 
 Path = '.\Piloto\';
 
-Folder = {'S001\','S002\','S003\','S004\','S005\'};
+Folder = {'RNW\','S001\','S002\','S003\','S004\','S005\'};
 
 right = {[1,2,11],[4,3,11],[3,4,11],[3,4,11],[3,4,11]};
 
@@ -34,7 +34,7 @@ for k = 1: length(Var)
 end
 
 % -- Filter
-Fs = 148.14;
+Fs = 148.1481;
 [t,Wn] = buttord(10/(Fs/2),20/(Fs/2),1,60);
 [b,a] = butter(t, Wn);
 
@@ -49,12 +49,12 @@ delay = 0;
 % --
 
 for Sub = 1: length(Folder)
-%     Files = dir([Path,Folder{Sub},'*Rep*.xls']);
-%     Files = {(Files(:).name)}';
-%     shank = {'right', 'left'};
-%     side = randperm(2,1);
-%     
-%     Sensor = eval(shank{side});
+    Files = dir([Path,Folder{Sub},'*Rep*.xls']);
+    Files = {(Files(:).name)}';
+    shank = {'right', 'left'};
+    side = randperm(2,1);
+    
+    Sensor = eval(shank{side});
     
     for numSensor = 1:length(Sensor{Sub})
         for w = 1: length(Win)
