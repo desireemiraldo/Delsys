@@ -20,6 +20,8 @@ Sensor = eval(shank{side});
 % --
 
 Sub = 8;
+Fs = 148.1481;
+Win = floor(Fs*40e-3);
 
 
 % for Sub = 1: length(Folder)
@@ -33,6 +35,7 @@ for f = 9:length(Files)
     Ftoe = ReadEMGWorks2(FilePath,Sensor{Sub}(3),'ACC Y');
     % Fheel = ReadEMGWorks2(FilePath,Sensor{Sub}(3),'ACC X');
     toc
+    M = movmean(Ftoe,Win);
     
     figure(side);
     plot(Ftoe(:,1),Ftoe(:,2),'b');
