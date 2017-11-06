@@ -6,7 +6,7 @@ ToeOff = NaN;
 HeelStrike = NaN;
 
 for n =  1: length(Files)
-    A = strcmp(instant.textdata(:,1),Files{n});
+    A = strcmp(instant.textdata(:,1),strrep(Files{n},'.csv',''));
     ind = find(A==1)-1; %first row is label
     
     for k = numWin(n) +1 : numWin(n+1)

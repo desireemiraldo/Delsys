@@ -3,16 +3,16 @@ clear all; clc; close all
 
 %% -- About the files
 
-Path = '.\Piloto\';
+Path = '.\Data\';
 
-Folder = {'RNW\','S001\','S002\','S003\','S004\','S005\'};
+Folder = {'S001\','S002\','S003\','S004\','S005\','S006\','S007\','S008\','S009\','S010\'};
 
-right = {[1,2,11],[4,3,11],[3,4,11],[3,4,11],[3,4,11]};
+right = {[1,2,11],[4,3,11],[3,4,11],[3,4,11],[3,4,11],[3,4,11],[3,4,11],[3,4,11],[3,4,11],[3,4,11]};
 
-left = {[1,2,11],[6,5,12],[5,6,12],[5,6,12],[5,6,12]};
+left = {[1,2,11],[6,5,12],[5,6,12],[5,6,12],[5,6,12],[5,6,12],[5,6,12],[5,6,12],[5,6,12],[5,6,12]};
 
-Win = {'Gauss'}; %,'Rect'};
-
+%Win = {'Gauss'}; %,'Rect'};
+Win = {'Rect'};
 
 Name = char(inputdlg('Enter the name for result files:',...
              'RESULT FILES - NAME', [1 50]));
@@ -49,7 +49,7 @@ delay = 0;
 % --
 
 for Sub = 1: length(Folder)
-    Files = dir([Path,Folder{Sub},'*Rep*.xls']);
+    Files = dir([Path,Folder{Sub},'*Rep*.csv']);
     Files = {(Files(:).name)}';
     shank = {'right', 'left'};
     side = randperm(2,1);
@@ -62,15 +62,11 @@ for Sub = 1: length(Folder)
             
             instant = importdata([Path,Folder{Sub},'Instantes_gait.txt'],'\t');
             
-            %% APAGAR DEPOIS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            for x = 2:21
-                instant.textdata(x,1) = strrep(instant.textdata(x,1),'Calcado','Calçado');
-            end
             
             % % % % % % % % % %             load RNW_data.mat
             % % % % % % % % % %             numWin = [0;7;14;21;28;34;41;48;54;61;68];
-            load([Path,Folder{Sub},'.matData\RNWvelocities_data.mat']);
-            load([Path,Folder{Sub},'.matData\RNWvelocities_numWin.mat']);
+            load('.\Piloto\RNW\.matData\RNWvelocities_data.mat');
+            load('.\Piloto\RNW\.matData\RNWvelocities_numWin.mat');
             
             %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             
@@ -205,48 +201,3 @@ for Sub = 1: length(Folder)
         end
     end
 end
-%% -- Plots
-
-% % figure;
-% % subplot(3,1,1); plot(Ftoe(:,1), Ftoe(:,2:end));
-% % legend({'1','2','3','4','5','6','7'})
-% %
-% % %Delsys
-% % subplot(3,1,2); plot(ACC(:,1), ACC(:,ShankL),ACCF(:,1), ACCF(:,ShankL)); ylabel('Shank L')
-% % title('Resultant'); legend('Raw','Filtered')
-% % subplot(3,1,3); plot(ACC(:,1), ACC(:,ShankR),ACCF(:,1), ACCF(:,ShankR)); ylabel('Shank R')
-% % % Kistler
-% % %subplot(3,1,2); plot(ACC1(:,1),ACC1(:,ShankL)); ylabel('Shank L')
-% % %title('Resultant')
-% % %subplot(3,1,3); plot(ACC2(:,1),ACC2(:,ShankL)); ylabel('Shank R')
-% % ylim([-2 2]);
-% % PlotInstants( instant, File )
-% %
-% % %--
-% % figure;
-% % subplot(3,1,1)
-% % plot(Ftoe(:,1), Ftoe(:,2:end)); legend({'1','2','3','4','5','6','7'})
-% %
-% % subplot(3,1,2); plot(ACC(:,1), ACCX(:,ShankL),ACC(:,1), ACCXF(:,ShankL)); ylabel('Shank L')
-% % title('X'); legend('Raw','Filtered')
-% % subplot(3,1,3); plot(ACC(:,1), ACCX(:,ShankR),ACCF(:,1), ACCXF(:,ShankR)); ylabel('Shank R')
-% % ylim([min(ACCX(:,ShankL))-1, max(ACCX(:,ShankL))+1]);
-% % PlotInstants( instant, File )
-% % %--
-% % figure;
-% % subplot(3,1,1)
-% % plot(Ftoe(:,1), Ftoe(:,2:end)); legend({'1','2','3','4','5','6','7'})
-% % subplot(3,1,2); plot(ACC(:,1), ACCY(:,ShankL), ACC(:,1), ACCYF(:,ShankL));  ylabel('Shank L')
-% % title('Y'); legend('Raw','Filtered')
-% % subplot(3,1,3); plot(ACC(:,1), ACCY(:,ShankR), ACCF(:,1), ACCYF(:,ShankR)); ylabel('Shank R')
-% % ylim([min(ACCY(:,ShankL))-1, max(ACCY(:,ShankL))+1]);
-% % PlotInstants( instant, File )
-% % %--
-% % figure;
-% % subplot(3,1,1)
-% % plot(Ftoe(:,1), Ftoe(:,2:end)); legend({'1','2','3','4','5','6','7'})
-% % subplot(3,1,2); plot(ACC(:,1), ACCZ(:,ShankL), ACC(:,1), ACCZF(:,ShankL)); ylabel('Shank L');
-% % title('Z'); legend('Raw','Filtered')
-% % subplot(3,1,3); plot(ACC(:,1), ACCZ(:,ShankR), ACCF(:,1), ACCZF(:,ShankR));ylabel('Shank R');
-% % ylim([min(ACCZ(:,ShankL))-1, max(ACCZ(:,ShankL))+1]);
-% % PlotInstants( instant, File )
