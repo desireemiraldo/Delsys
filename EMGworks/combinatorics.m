@@ -1,4 +1,4 @@
-function [ResultsCombinatorics] = combinatorics2(Var,Sensors,p,y,pct,ToeOff,Fy,delay,time,indTr,indTs)
+function [ResultsCombinatorics] = combinatorics(Var,Sensors,p,y,pct,ToeOff,Fy,delay,time,indTr,indTs)
 
 LinearCombination = NaN(size(time));
 

@@ -1,4 +1,4 @@
-function [ToeOff, HeelStrike] = ReshapeInstants2(deltaT, instant,Files,numWin)
+function [ToeOff, HeelStrike] = ReshapeInstants(deltaT, instant,Files,numWin)
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 

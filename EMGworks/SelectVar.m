@@ -1,4 +1,4 @@
-function Var = SelectVar2(Data,Sensor,Channel)
+function Var = SelectVar(Data,Sensor,Channel)
 
 if Sensor==11 || Sensor==12
     label = strcat("Trigno FSR Adapter ",num2str(Sensor),":"," ",Channel," ", num2str(Sensor));

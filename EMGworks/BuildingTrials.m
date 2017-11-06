@@ -1,4 +1,4 @@
-function [FilesData, numWin] = BuildingTrials2(Path,Files, deleteTime, deltaT)
+function [FilesData, numWin] = BuildingTrials(Path,Files, deleteTime, deltaT)
 
 Trials = 0;
 numWin = zeros(length(Files)+1,1);

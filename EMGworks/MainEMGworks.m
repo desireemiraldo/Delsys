@@ -11,7 +11,7 @@ right = {[1,2,11],[4,3,11],[3,4,11],[3,4,11],[3,4,11],[3,4,11],[3,4,11],[3,4,11]
 
 left = {[1,2,11],[6,5,12],[5,6,12],[5,6,12],[5,6,12],[5,6,12],[5,6,12],[5,6,12],[5,6,12],[5,6,12]};
 
-%Win = {'Gauss'}; %,'Rect'};
+% Win = {'Gauss'}; %,'Rect'};
 Win = {'Rect'};
 
 Name = char(inputdlg('Enter the name for result files:',...
@@ -70,7 +70,7 @@ for Sub = 1: length(Folder)
             
             %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             
-            %             [Data,numWin] = BuildingTrials2([Path,Folder{Sub}],Files, 3, deltaT);
+            %             [Data,numWin] = BuildingTrials([Path,Folder{Sub}],Files, 3, deltaT);
             %             save([Name,'_data.mat'],'Data');
             %             save([Name,'_numWin.mat'],'numWin');
             %             movefile ([Name,'_data.mat'],[Path,Folder{Sub},'.matData'])
@@ -80,7 +80,7 @@ for Sub = 1: length(Folder)
             delta(:,1) = time(1,1,:);
             delta(:,2) = time(end,1,:);
             
-            [TO, HS] = ReshapeInstants2(delta, instant,Files,numWin);
+            [TO, HS] = ReshapeInstants(delta, instant,Files,numWin);
             
             TO = TO + delay; % equipaments delay
             HS = HS  + delay;
@@ -89,7 +89,7 @@ for Sub = 1: length(Folder)
             for i = 1:length(Signal)
                 
                 VarName = strrep(Signal{i},' ','');
-                eval([VarName, ' = SelectVar2(Data,Sensor{Sub}(numSensor),Signal(i));']);
+                eval([VarName, ' = SelectVar(Data,Sensor{Sub}(numSensor),Signal(i));']);
                 
                 temp = eval(VarName);
                 %Filtering
@@ -100,7 +100,7 @@ for Sub = 1: length(Folder)
             Cte = ones(size(eval(VarName),1),size(eval(VarName),2), size(eval(VarName),3));
             
             % FSR data
-            Ftoe =  SelectVar2(Data,11,'ACC Y');
+            Ftoe =  SelectVar(Data,11,'ACC Y');
             
             
             tic
@@ -144,7 +144,16 @@ for Sub = 1: length(Folder)
                 if strcmp(Win(w),'Rect')
                     stimulWin = zeros(length(Data.data),1);
                     for kk = 1: size(TO,2)
-                        stimulWin(floor((TO(j,kk)-2*sd)*Fs):floor(TO(j,kk)*Fs)) = 1;
+                        if isfinite(TO(j,kk)) 
+                            ind1 = floor(((TO(j,kk)-delta(j,1)) -2*sd)*Fs)
+                            ind2 =  floor((TO(j,kk)-delta(j,1))*Fs)
+                            
+                            if ind1<=0
+                                ind1 = 1;
+                            end
+                            
+                            stimulWin(ind1:ind2,1) = 1;
+                        end
                     end
                 end
                 y(:,j) = stimulWin;
@@ -157,10 +166,10 @@ for Sub = 1: length(Folder)
             
             
             %% --- TESTANDO AS JANELAS DE ESTÍMULO
-            %         figure;
-            %         plot(Ftoe(:,1),Ftoe(:,2),'k')
-            %         hold on
-            %         plot(time,1100*y)
+            % figure;
+            % plot(Ftoe(:,1),Ftoe(:,2),'k')
+            % hold on
+            % plot(time,1100*y)
             
             %% --  -- Select trials for trainning and test
             if numSensor == 1
@@ -183,7 +192,7 @@ for Sub = 1: length(Folder)
             for pct = -0.5: 0.01 : 1
                 n = n+1;
                 disp(pct)
-                [ResultsCombinatorics] = combinatorics2(Var,1,p,y,pct,TO,Ftoe,delay,time,indTr,indTs);
+                [ResultsCombinatorics] = combinatorics(Var,1,p,y,pct,TO,Ftoe,delay,time,indTr,indTs);
                 
                 % RT(t+1:t+length(ResultsTrials)) = ResultsTrials;
                 RC((n-1)*TotalComb + 1 : n*TotalComb) = ResultsCombinatorics;
