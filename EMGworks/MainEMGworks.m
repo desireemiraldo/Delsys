@@ -5,17 +5,16 @@ clear all; clc; close all
 
 Path = '.\Data\';
 
-Folder = {'S001\','S002\','S003\','S004\','S005\','S006\','S007\','S008\','S009\','S010\'};
+Folder = {'S001\','S001\','S002\','S003\','S004\','S005\','S006\','S007\','S008\','S009\','S010\'};
 
-right = {[1,2,11],[4,3,11],[3,4,11],[3,4,11],[3,4,11],[3,4,11],[3,4,11],[3,4,11],[3,4,11],[3,4,11]};
+right = {[1,2,11],[1,2,11],[4,3,11],[3,4,11],[3,4,11],[3,4,11],[3,4,11],[3,4,11],[3,4,11],[3,4,11],[3,4,11]};
 
-left = {[1,2,11],[6,5,12],[5,6,12],[5,6,12],[5,6,12],[5,6,12],[5,6,12],[5,6,12],[5,6,12],[5,6,12]};
+left = {[1,2,11],[1,2,11],[6,5,12],[5,6,12],[5,6,12],[5,6,12],[5,6,12],[5,6,12],[5,6,12],[5,6,12],[5,6,12]};
 
-% Win = {'Gauss'}; %,'Rect'};
-Win = {'Rect'};
+Win = {'Gauss'};%,'Rect'};
 
 Name = char(inputdlg('Enter the name for result files:',...
-             'RESULT FILES - NAME', [1 50]));
+    'RESULT FILES - NAME', [1 50]));
 %% -- Initializing some variables
 
 % --
@@ -47,17 +46,18 @@ deltaT = 2.75; %seconds/window
 delay = 0;
 
 % --
-
-for Sub = 1: length(Folder)
-    Files = dir([Path,Folder{Sub},'*Rep*.csv']);
-    Files = {(Files(:).name)}';
-    shank = {'right', 'left'};
-    side = randperm(2,1);
-    
-    Sensor = eval(shank{side});
-    
-    for numSensor = 1:length(Sensor{Sub})
-        for w = 1: length(Win)
+Trials = 0; TempTO = 0;
+for w = 1: length(Win)
+    for Sub = 1: 2%length(Folder)
+        Files = dir([Path,Folder{Sub},'*Rep*.csv']);
+        Files = {(Files(:).name)}';
+        shank = {'right', 'left'};
+        side = randperm(2,1);
+        
+        Sensor = eval(shank{side});
+        
+        for numSensor = 1: 1 % length(Sensor{Sub})
+            
             %% Loading data
             
             instant = importdata([Path,Folder{Sub},'Instantes_gait.txt'],'\t');
@@ -80,10 +80,10 @@ for Sub = 1: length(Folder)
             delta(:,1) = time(1,1,:);
             delta(:,2) = time(end,1,:);
             
-            [TO, HS] = ReshapeInstants(delta, instant,Files,numWin);
+            [newTO, newHS] = ReshapeInstants(delta, instant,Files,numWin);
             
-            TO = TO + delay; % equipaments delay
-            HS = HS  + delay;
+            newTO = newTO + delay; % equipaments delay
+            newHS = newHS  + delay;
             
             
             for i = 1:length(Signal)
@@ -100,7 +100,7 @@ for Sub = 1: length(Folder)
             Cte = ones(size(eval(VarName),1),size(eval(VarName),2), size(eval(VarName),3));
             
             % FSR data
-            Ftoe =  SelectVar(Data,11,'ACC Y');
+            newFtoe =  SelectVar(Data,11,'ACC Y');
             
             
             tic
@@ -124,18 +124,18 @@ for Sub = 1: length(Folder)
             
             % -- Initializing variables for linear combination
             
-            p = NaN(size(Data.data,1),length(Var),size(Data.data,3));
-            y = NaN(size(Data.data,1),size(Data.data,3));
+            newP = NaN(size(Data.data,1),length(Var),size(Data.data,3));
+            newY = NaN(size(Data.data,1),size(Data.data,3));
             
             first = NaN(1,size(Data.data,3));
             last = NaN(1,size(Data.data,3));
             
             for j = 1 : size(Data.data,3)
                 % for i = 1 : length(Sensors)
-                first(j) = min([HS(j,:),TO(j,:)],[],2);
-                last(j) = max([HS(j,:),TO(j,:)],[],2);
+                first(j) = min([newHS(j,:),newTO(j,:)],[],2);
+                last(j) = max([newHS(j,:),newTO(j,:)],[],2);
                 
-                tempTO = (TO(j,:));
+                tempTO = (newTO(j,:));
                 tempTO(isnan(tempTO))=[];
                 if strcmp(Win(w),'Gauss')
                     stimulWin = sum(exp(-0.5*((Data.data(:,1,j) - (tempTO - sd))/(sd/3)).^2),2);
@@ -143,10 +143,10 @@ for Sub = 1: length(Folder)
                 
                 if strcmp(Win(w),'Rect')
                     stimulWin = zeros(length(Data.data),1);
-                    for kk = 1: size(TO,2)
-                        if isfinite(TO(j,kk)) 
-                            ind1 = floor(((TO(j,kk)-delta(j,1)) -2*sd)*Fs)
-                            ind2 =  floor((TO(j,kk)-delta(j,1))*Fs)
+                    for kk = 1: size(newTO,2)
+                        if isfinite(newTO(j,kk))
+                            ind1 = floor(((newTO(j,kk)-delta(j,1)) -2*sd)*Fs);
+                            ind2 =  floor((newTO(j,kk)-delta(j,1))*Fs);
                             
                             if ind1<=0
                                 ind1 = 1;
@@ -156,57 +156,89 @@ for Sub = 1: length(Folder)
                         end
                     end
                 end
-                y(:,j) = stimulWin;
+                newY(:,j) = stimulWin;
             end
             for jj = 1 : length (Var)
-                p(:,jj,:) = eval([Var{jj},'(:,2,:)']);
+                newP(:,jj,:) = eval([Var{jj},'(:,2,:)']);
                 
             end
             % end
-            
-            
-            %% --- TESTANDO AS JANELAS DE ESTÍMULO
-            % figure;
-            % plot(Ftoe(:,1),Ftoe(:,2),'k')
-            % hold on
-            % plot(time,1100*y)
-            
-            %% --  -- Select trials for trainning and test
-            if numSensor == 1
-                [indTr,indTs] = PartData(TO,floor(length(TO)*0.35));
-            end
-            %             indTr = [1;2;3;4;5;6;7;10;11;13;16;17;18;19;22;24;25;26;28;31;32;33;34;35;37;38;39;41;42;44;45;46;47;48;49;51;53;55;56;58;62;64;65;66;67];
-            %             indTs = [8;9;12;14;15;20;21;23;27;29;30;36;40;43;50;52;54;57;59;60;61;63;68];
-            
-            %% --- Combinatorial Analysis
-            
-            n=0; %t=0;
-            RC = struct('TrialsTr',{0},'Features',{0},'Threshold',{0},'TP',{0},...
-                'FP',{0},'TN',{0},'FN',{0},'beta',{0});
-            RC = repmat(RC,TotalComb*101,1);
-            
-            % RT = struct('Trial',{0},'Features',{0},'Locs',{0},'Threshold',{0},...
-            %     'TP',{0},'FP',{0},'TN',{0},'FN',{0},'beta',{0});
-            % RT = repmat(RT,TotalComb*101*length(indTr),1);
-            
-            for pct = -0.5: 0.01 : 1
-                n = n+1;
-                disp(pct)
-                [ResultsCombinatorics] = combinatorics(Var,1,p,y,pct,TO,Ftoe,delay,time,indTr,indTs);
-                
-                % RT(t+1:t+length(ResultsTrials)) = ResultsTrials;
-                RC((n-1)*TotalComb + 1 : n*TotalComb) = ResultsCombinatorics;
-                
-            end
-            nameRes = [Name,'sensor',num2str(Sensor{Sub}(numSensor)),'.mat'];
-            % save([Name,'.mat'],'RT')
-            save(nameRes,'RC')
-            
-            movefile (nameRes,'Resultados')
-            
-            clear RC; %clear RT
-            
-            toc
         end
+        
+        p = NaN(size(Data.data,1),length(Var),size(Data.data,3) + Trials);
+        y = NaN(size(Data.data,1),size(Data.data,3) + Trials);
+        TO = NaN (size(Data.data,3) + Trials, max([size(newTO,2),size(TempTO,2)]));
+        Ftoe = NaN(size(Data.data,1),2,size(Data.data,3) + Trials);
+        
+        %% Ftoe
+        if Trials ~=0
+            p(:,:,1:Trials) = TempP;
+            p(:,:,Trials+1:end) = newP;
+            y(:,1:Trials) = TempY;
+            y(:,Trials+1:end) = newY;
+            TO(1:Trials,1:size(TempTO,2)) = TempTO;
+            TO(Trials+1:end,1:size(newTO,2)) = newTO;
+            Ftoe(:,:,1:Trials) = TempFtoe;
+            Ftoe(:,:,Trials+1:end) = newFtoe;
+        else
+            p = newP;
+            y = newY;
+            TO = newTO;
+            Ftoe = newFtoe;
+        end
+        TempP = p;
+        TempY = y;
+        TempTO = TO;
+        TempFtoe = Ftoe;
+        Trials = Trials + size(Data.data,3);
+        clear newP; clear newY; clear newTO; clear newFtoe;
+        
     end
 end
+time = Ftoe(:,1,:);
+
+%% --- TESTANDO AS JANELAS DE ESTÍMULO
+% figure;
+% plot(Ftoe(:,1),Ftoe(:,2),'k')
+% hold on
+% plot(time,1100*y)
+
+%% --  -- Select trials for trainning and test
+if numSensor == 1
+    [indTr,indTs] = PartData(TO,floor(length(TO)*0.35));
+end
+%             indTr = [1;2;3;4;5;6;7;10;11;13;16;17;18;19;22;24;25;26;28;31;32;33;34;35;37;38;39;41;42;44;45;46;47;48;49;51;53;55;56;58;62;64;65;66;67];
+%             indTs = [8;9;12;14;15;20;21;23;27;29;30;36;40;43;50;52;54;57;59;60;61;63;68];
+
+%% --- Combinatorial Analysis
+
+n=0; %t=0;
+RC = struct('TrialsTr',{0},'Features',{0},'Threshold',{0},'TP',{0},...
+    'FP',{0},'TN',{0},'FN',{0},'beta',{0});
+RC = repmat(RC,TotalComb*101,1);
+
+% RT = struct('Trial',{0},'Features',{0},'Locs',{0},'Threshold',{0},...
+%     'TP',{0},'FP',{0},'TN',{0},'FN',{0},'beta',{0});
+% RT = repmat(RT,TotalComb*101*length(indTr),1);
+
+for pct = -0.5: 0.01 : 1
+    n = n+1;
+    disp(pct)
+    [ResultsCombinatorics] = combinatorics(Var,1,p,y,pct,TO,Ftoe,delay,time,indTr,indTs);
+    
+    % RT(t+1:t+length(ResultsTrials)) = ResultsTrials;
+    RC((n-1)*TotalComb + 1 : n*TotalComb) = ResultsCombinatorics;
+    
+end
+nameRes = [Name,'sensor',num2str(Sensor{Sub}(numSensor)),'.mat'];
+% save([Name,'.mat'],'RT')
+save(nameRes,'RC')
+
+movefile (nameRes,'Resultados')
+
+clear RC; %clear RT
+
+toc
+%         end
+%     end
+% end
